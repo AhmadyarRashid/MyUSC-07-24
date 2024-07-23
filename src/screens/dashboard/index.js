@@ -81,6 +81,15 @@ function DashboardScreen() {
                 <Text style={styles.urduText}> ایپ استمال کرنے کا طریقہ</Text>
               </View>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => navigation.navigate('onlineShopping')}>
+              <Image source={require('./../../assets/instructionIcon.png')} />
+              <View style={styles.twoLineText}>
+                <Text style={styles.btnTitle}>ONLINE SHOPPING</Text>
+                <Text style={styles.urduText}>آن لائن خریداری</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </ImageBackground>
@@ -117,7 +126,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   main: {
-    marginTop: '20%',
+    paddingVertical: '8%',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
