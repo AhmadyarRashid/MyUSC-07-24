@@ -1,38 +1,46 @@
-import { Text, TextInput, View } from "react-native"
+import { StyleSheet, Text, TextInput, View } from "react-native"
 
-import { BLACK, FLINT_STONE_LIGHT } from "../../constants/colors"
-import {  sR, wR } from "../../constants/dimensions"
+import { BLACK, FLINT_STONE_LIGHT, THEME_LIGHT } from "../../constants/colors"
+import { hR, sR, wR } from "../../constants/dimensions"
 
 function PhoneInput() {
-    return <View style={{
-        flexDirection: "row",
-        alignItems: 'center',
-    }}>
+    return <View style={styles.rootContainer}>
 
-        <View style={{
-            paddingRight: wR * 2,
-            height: "100%",
-            width: "32%",
-
-        }}>
-            <Text style={{ color: BLACK }}>Country Code</Text>
-            <Text style={{ color: BLACK, fontSize: sR * 1.4, alignSelf: 'center' }}>+92</Text>
+        <View style={styles.leftContainer}>
+            <Text style={styles.countryCodeLabelText}>Country Code</Text>
+            <Text style={styles.countryCodeText}>+92</Text>
         </View>
 
         <View
-            style={{
-                paddingHorizontal: wR * 2,
-                height: "100%",
-                width: "68%",
-
-            }}
+            style={styles.rightContainer}
         >
-            <TextInput placeholder="Phone number" placeholderTextColor={FLINT_STONE_LIGHT} style={{color:BLACK}} maxLength={10} keyboardType={"number-pad"} />
+            <TextInput placeholder="Phone number" placeholderTextColor={FLINT_STONE_LIGHT} style={styles.input} maxLength={10} keyboardType={"number-pad"} />
         </View>
-
-
-
     </View>
 }
 
 export default PhoneInput
+
+const styles = StyleSheet.create({
+    rootContainer: {
+        flexDirection: "row",
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        paddingBottom: hR,
+        borderBottomColor: THEME_LIGHT
+    },
+    leftContainer: {
+        paddingRight: wR * 2,
+        height: "100%",
+        width: "32%",
+    },
+    countryCodeLabelText: { color: BLACK },
+    countryCodeText: { color: BLACK, fontSize: sR * 1.6, alignSelf: 'center' },
+    rightContainer: {
+        paddingHorizontal: wR * 2,
+        height: "100%",
+        width: "68%",
+
+    },
+    input: { color: BLACK, fontSize: sR * 1.6 }
+})

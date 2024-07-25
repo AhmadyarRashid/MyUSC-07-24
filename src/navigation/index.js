@@ -14,6 +14,7 @@ import VideoPlayerScreen from '../screens/videoPlayer';
 import FilterProvinceStoreScreen from '../screens/storeLocator/filterProvince';
 import ViewOnMapScreen from '../screens/storeLocator/viewOnMap';
 import OnlineShoppingScreen from '../screens/onlineShopping';
+import OrderDetailScreen from '../screens/OrderDetail';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,7 @@ function Navigation() {
       <Stack.Screen name="instructions" component={InstructionsScreen} />
       <Stack.Screen name="ViewOnMap" component={ViewOnMapScreen} />
       <Stack.Screen name="onlineShopping" component={OnlineShoppingScreen} />
+      <Stack.Screen name="OrderDetail" component={OrderDetailScreen} />
     </Stack.Navigator>
   );
 }
