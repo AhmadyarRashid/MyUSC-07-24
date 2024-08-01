@@ -22,7 +22,7 @@ const ComplaintModal = ({ isVisible, onCloseModal }) => {
 
                 <VerticalSpace h={4} />
 
-                <Text style={styles.heading}>Register Complaint</Text>
+                <Text style={styles.headingText}>Register Complaint</Text>
 
                 <VerticalSpace h={4} />
 
@@ -49,5 +49,5 @@ export default ComplaintModal
 const styles = StyleSheet.create({
     modal: { margin: 0 },
     rootContainer: { backgroundColor: WHITE, flex: 1, paddingHorizontal: wR * 4, paddingVertical: hR * 4 },
-    heading:{color:THEME_LIGHT,fontSize:sR*1.4,fontWeight:'600'}
+    headingText:{color:THEME_LIGHT,fontSize:sR*1.4,fontWeight:'600'}
 })

@@ -4,7 +4,7 @@ import { THEME_LIGHT, WHITE } from "../../../constants/colors";
 import { ButtonSize } from "../../../constants/enum";
 import { hR, sR } from "../../../constants/dimensions";
 
-const SolidButton = ({
+const HollowButton = ({
     label,
     customTextStyle,
     customButtonStyle,
@@ -21,20 +21,22 @@ const SolidButton = ({
     );
 };
 
-export default SolidButton;
+export default HollowButton;
 
 const styles = StyleSheet.create({
     buttonStyle: (size) => ({
-        backgroundColor: THEME_LIGHT,
+        backgroundColor: WHITE,
         width: ButtonSize[size],
         alignItems: "center",
         justifyContent: "center",
         paddingVertical: hR * 1.6,
         borderRadius: sR,
         flexDirection: "row",
+        borderWidth:1.6,
+        borderColor:THEME_LIGHT
     }),
     textStyle: {
         fontSize: sR * 1.4,        
-        color: WHITE,
+        color: THEME_LIGHT,
     },
 });

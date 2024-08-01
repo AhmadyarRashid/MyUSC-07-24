@@ -23,7 +23,7 @@ const FeedbackModal = ({ isVisible, onCloseModal }) => {
 
                 <VerticalSpace h={4} />
 
-                <Text style={styles.heading}>Feedback</Text>
+                <Text style={styles.headingText}>Feedback</Text>
 
                 <VerticalSpace h={4} />
 
@@ -57,5 +57,5 @@ export default FeedbackModal
 const styles = StyleSheet.create({
     modal: { margin: 0 },
     rootContainer: { backgroundColor: WHITE, flex: 1, paddingHorizontal: wR * 4, paddingVertical: hR * 4 },
-    heading:{color:THEME_LIGHT,fontSize:sR*1.4,fontWeight:'600'}
+    headingText:{color:THEME_LIGHT,fontSize:sR*1.4,fontWeight:'600'}
 })

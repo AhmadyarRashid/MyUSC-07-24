@@ -5,12 +5,13 @@ import VerticalSpace from "../../shared/verticalSpace"
 import SolidButton from "../../shared/buttons/solidButton"
 import ComplaintModal from "../../shared/modals/ComplaintModal"
 import FeedbackModal from "../../shared/modals/FeedbackModal"
+import Receipt from "../../shared/Receipt"
 
-import { BLACK, FLINT_STONE_LIGHT, JASPER_CANE, WHITE } from "../../constants/colors"
+import { BLACK, FLINT_STONE_LIGHT, JASPER_CANE, THEME_LIGHT, WHITE } from "../../constants/colors"
 import { hR, sR, wR } from "../../constants/dimensions"
 import useToggle from "../../hooks/useToggle"
 
-const DATA = [
+const ORDER_DETAILS = [
     {
         label: "Order#",
         value: "123456789"
@@ -30,11 +31,38 @@ const DATA = [
     {
         label: "Arrival Date",
         value: "12-JUN-2024",
-    },
+    }
+]
+
+const PRODUCT_DETAILS = [
     {
         label: "Total Products",
-        value: "25"
-    }
+        value: "2"
+    },
+    {
+        label: "Product 1 (Atta)",
+        value: "Qty 2"
+    },
+    {
+        label: "Product 2 (Oil)",
+        value: "Qty 5"
+    },
+    {
+        label: "GST 5%",
+        value: "120 PKR"
+    },
+    {
+        label: "Total Amount",
+        value: "2,100 PKR"
+    },
+    {
+        label: "Cash",
+        value: "2,500 PKR"
+    },
+    {
+        label: "Remaining",
+        value: "400 PKR"
+    },
 ]
 
 const OrderDetailScreen = () => {
@@ -53,17 +81,29 @@ const OrderDetailScreen = () => {
             <ScrollView keyboardShouldPersistTaps={'always'} automaticallyAdjustKeyboardInsets={true}>
                 <VerticalSpace h={4} />
 
+                <Text style={styles.headingText}>Order Details</Text>
+
+                <VerticalSpace h={4} />
+
                 {
-                    DATA.map((item, index) =>
-                        <View style={styles.orderDetailContainer} key={index}>
-                            <View style={styles.individualCell}>
+                    ORDER_DETAILS.map((item, index) =>
+                        <View style={styles.orderDetailsContainer} key={index}>
+                            <View style={styles.individualCellOrder}>
                                 <Text style={styles.labelText}>{item.label}</Text>
                             </View>
-                            <View style={styles.individualCell}>
+                            <View style={styles.individualCellOrder}>
                                 <Text style={styles.valueText}>{item.value}</Text>
                             </View>
                         </View>)
                 }
+
+                <VerticalSpace h={4} />
+
+                <Text style={styles.headingText}>Product Details</Text>
+
+                <VerticalSpace h={4} />
+
+                <Receipt />
 
                 <VerticalSpace h={4} />
 
@@ -86,8 +126,9 @@ const styles = StyleSheet.create({
         backgroundColor: WHITE,
         paddingHorizontal: wR * 4
     },
-    orderDetailContainer: { flexDirection: "row", alignItems: "flex-start", borderBottomWidth: 1, paddingVertical: hR * 2, borderBottomColor: JASPER_CANE },
-    individualCell: { width: "50%" },
+    orderDetailsContainer: { flexDirection: "row", alignItems: "flex-start", paddingVertical: hR },
+    individualCellOrder: { width: "50%" },
     labelText: { color: BLACK, fontSize: sR * 1.4, fontWeight: "600" },
-    valueText: { color: FLINT_STONE_LIGHT, fontSize: sR * 1.2 }
+    valueText: { color: FLINT_STONE_LIGHT, fontSize: sR * 1.2 },
+    headingText: { color: THEME_LIGHT, fontSize: sR * 1.4, fontWeight: '600' },
 })

@@ -15,6 +15,8 @@ import FilterProvinceStoreScreen from '../screens/storeLocator/filterProvince';
 import ViewOnMapScreen from '../screens/storeLocator/viewOnMap';
 import OnlineShoppingScreen from '../screens/onlineShopping';
 import OrderDetailScreen from '../screens/OrderDetail';
+import OrderNowScreen from '../screens/OrderNow';
+import StoreWebviewScreen from '../screens/StoreWebview';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,6 +47,8 @@ function Navigation() {
       <Stack.Screen name="ViewOnMap" component={ViewOnMapScreen} />
       <Stack.Screen name="onlineShopping" component={OnlineShoppingScreen} />
       <Stack.Screen name="OrderDetail" component={OrderDetailScreen} />
+      <Stack.Screen name="OrderNow" component={OrderNowScreen} />
+      <Stack.Screen name="StorerWebview" component={StoreWebviewScreen} />
     </Stack.Navigator>
   );
 }

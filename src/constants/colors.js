@@ -7,6 +7,8 @@ const FLINT_STONE = "#2f353b";
 const JASPER_CANE = "#E8E8E8";
 const PINBALL = "#D3D3D3";
 const WHITE_SMOKE = "#F5F5F5";
+const GOLD = "#FFD700";
+const BRILLIANCE = '#fdfdfd'
 
 export {
     WHITE,
@@ -17,5 +19,7 @@ export {
     FLINT_STONE,
     JASPER_CANE,
     PINBALL,
-    WHITE_SMOKE
+    WHITE_SMOKE,
+    GOLD,
+    BRILLIANCE
 }

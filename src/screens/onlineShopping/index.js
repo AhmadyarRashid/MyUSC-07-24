@@ -6,6 +6,7 @@ import LoginModal from "../../shared/modals/loginModal"
 import PrimaryHeader from "../../shared/Header/PrimaryHeader"
 import VerticalSpace from "../../shared/verticalSpace"
 import OrderCard from "../../shared/Cards/OrderCard"
+import SolidButton from "../../shared/buttons/solidButton"
 
 import useToggle from "../../hooks/useToggle"
 import { THEME_LIGHT, WHITE } from "../../constants/colors"
@@ -18,13 +19,25 @@ function OnlineShoppingScreen() {
 
     const goToOrderDetail = useCallback(() => {
         navigation.navigate(`OrderDetail`);
-      }, [navigation]);
+    }, [navigation]);
+
+    const goToOrderNow = useCallback(() => {
+        navigation.navigate(`OrderNow`);
+    }, [navigation]);
+
+    const goBack = useCallback(() => {
+        navigation.goBack()
+    }, [navigation]);
 
     return (
         <View style={styles.rootContainer}>
             <LoginModal isVisible={displayLoginModal} onCloseModal={toggleLoginModal} />
 
-            <PrimaryHeader onPress={() => navigation.goBack()} />
+            <PrimaryHeader onPress={goBack} />
+
+            <VerticalSpace h={4} />
+
+            <SolidButton label={`Order Now!`} onPress={goToOrderNow}/>
 
             <VerticalSpace h={4} />
 
@@ -39,6 +52,6 @@ function OnlineShoppingScreen() {
 export default OnlineShoppingScreen
 
 const styles = StyleSheet.create({
-    rootContainer:{paddingHorizontal:wR*4,flex:1,backgroundColor:WHITE},
-    screenHeadingText:{color:THEME_LIGHT,fontSize:sR*2,fontWeight:'600',alignSelf:"center"}
+    rootContainer: { paddingHorizontal: wR * 4, flex: 1, backgroundColor: WHITE },
+    screenHeadingText: { color: THEME_LIGHT, fontSize: sR * 2, fontWeight: '600', alignSelf: "center" }
 })
