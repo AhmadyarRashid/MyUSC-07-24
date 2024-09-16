@@ -63,6 +63,16 @@ function DashboardScreen() {
                 <Text style={styles.urduText}>سبسڈی کی اہلیت چیک کریں</Text>
               </View>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => navigation.navigate('register')}
+              >
+              {/* <Image source={require('./../../assets/pmt.png')} /> */}
+              <View style={styles.twoLineText}>
+                <Text style={styles.btnTitle}>GET SUBSIDY CODE</Text>
+                <Text style={styles.urduText}>سبسڈی کوڈ حاصل کریں</Text>
+              </View>
+            </TouchableOpacity>
             {/*<TouchableOpacity*/}
             {/*  style={styles.btn}*/}
             {/*  onPress={() => navigation.navigate('reports')}>*/}
