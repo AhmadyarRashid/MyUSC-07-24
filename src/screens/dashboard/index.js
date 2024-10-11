@@ -10,9 +10,21 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function DashboardScreen() {
   const navigation = useNavigation();
+
+  const handleAuth = async()=>{
+    const token = await AsyncStorage.getItem('token');
+
+    if(token){
+      navigation.navigate('quickResponseCode')
+    }else{
+      navigation.navigate('register')
+    }
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ImageBackground
@@ -65,7 +77,7 @@ function DashboardScreen() {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.btn}
-              onPress={() => navigation.navigate('register')}
+              onPress={handleAuth}
               >
               {/* <Image source={require('./../../assets/pmt.png')} /> */}
               <View style={styles.twoLineText}>

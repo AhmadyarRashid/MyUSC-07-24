@@ -50,6 +50,7 @@ function AccountVerificationSuccessScreen() {
               onPress={() => navigation.navigate('quickResponseCode')}>
               <Text style={styles.solidButtonText}>Get Your Subsidy Code</Text>
             </TouchableOpacity>
+            
           </View>
         </ScrollView>
       </ImageBackground>

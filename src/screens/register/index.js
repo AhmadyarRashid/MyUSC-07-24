@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,9 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import axios from 'axios';
+import {qrUrl} from '../../constants/url';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const InputField = ({
   label,
@@ -18,6 +21,7 @@ const InputField = ({
   maxLength,
   keyboardType,
   onChangeText,
+  value,
 }) => (
   <View style={styles.inputContainer}>
     <Text style={styles.inputLabel}>{label}</Text>
@@ -27,12 +31,30 @@ const InputField = ({
       onChangeText={onChangeText}
       keyboardType={keyboardType}
       maxLength={maxLength}
+      value={value}
     />
   </View>
 );
 
 function RegisterScreen() {
   const navigation = useNavigation();
+
+  const [phone, setPhone] = useState(null);
+  const [cnic, setCNIC] = useState(null);
+
+  const handleRegister = async () => {
+    try {
+      const response = await axios.post(`${qrUrl}/user/auth`, {
+        mobile_no: phone,
+        cnic: cnic,
+      });
+      await AsyncStorage.setItem('token', response.data.result);
+
+      navigation.navigate('accountVerificationSuccess')
+    } catch (err) {
+      // console.log(JSON.stringify(err.response?.data || err.message, null, 2));
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -58,19 +80,21 @@ function RegisterScreen() {
               placeholder="Enter phone"
               maxLength={11}
               keyboardType="numeric"
-              onChangeText={text => console.log(text)}
+              onChangeText={text => setPhone(text)}
+              value={phone}
             />
             <InputField
               label="CNIC"
               placeholder="Enter CNIC"
               maxLength={13}
               keyboardType="numeric"
-              onChangeText={text => console.log(text)}
+              onChangeText={text => setCNIC(text)}
+              value={cnic}
             />
             <TouchableOpacity
               style={styles.solidButton}
               accessibilityLabel="Register"
-              onPress={() => navigation.navigate('accountVerificationSuccess')}>
+              onPress={handleRegister}>
               <Text style={styles.solidButtonText}>Register</Text>
             </TouchableOpacity>
           </View>

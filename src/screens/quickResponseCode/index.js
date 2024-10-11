@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,13 +7,48 @@ import {
   TouchableOpacity,
   ImageBackground,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import QRCode from 'react-native-qrcode-svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import {qrUrl} from '../../constants/url';
 
 function QuickResponseCodeScreen() {
   const navigation = useNavigation();
+
+  const [qrData, setQrData] = useState('');
+
+  useEffect(() => {
+    verifyOTP();
+  }, []);
+
+  const verifyOTP = async () => {
+    const token = await AsyncStorage.getItem('token');
+
+    try {
+      const response = await axios.get(`${qrUrl}/user/otp`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setQrData(response.data.data.cnic + response.data.data.otp);
+    } catch (err) {
+      console.error(JSON.stringify(err.response?.data || err.message, null, 2));
+    }
+  };
+
+  const clearToken = async () => {
+    await AsyncStorage.removeItem('token');
+
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'dashboard'}],
+    });
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -38,18 +73,30 @@ function QuickResponseCodeScreen() {
               Scan your QR code at the counter to get your subsidy.
             </Text>
 
-            <View style={{
-                marginVertical:'12%',
-                alignSelf:"center"
-            }}>
-              <QRCode value="236482746283764/123456" />
+            <View
+              style={{
+                marginVertical: '12%',
+                alignSelf: 'center',
+              }}>
+              {qrData !== '' ? (
+                <QRCode value={qrData} />
+              ) : (
+                <ActivityIndicator />
+              )}
             </View>
 
             <TouchableOpacity
               style={styles.solidButton}
               accessibilityLabel=""
-              onPress={() => navigation.navigate('')}>
+              onPress={verifyOTP}>
               <Text style={styles.solidButtonText}>Regenerate Code</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.solidButton}
+              accessibilityLabel=""
+              onPress={clearToken}>
+              <Text style={styles.solidButtonText}>Sign Out</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -102,6 +149,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: '4%',
+    marginBottom: '4%',
   },
   solidButtonText: {
     color: 'white',
