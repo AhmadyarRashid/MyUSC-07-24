@@ -11,19 +11,20 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ScanBarcode} from 'iconsax-react-native';
 
 function DashboardScreen() {
   const navigation = useNavigation();
 
-  const handleAuth = async()=>{
+  const handleAuth = async () => {
     const token = await AsyncStorage.getItem('token');
 
-    if(token){
-      navigation.navigate('quickResponseCode')
-    }else{
-      navigation.navigate('register')
+    if (token) {
+      navigation.navigate('quickResponseCode');
+    } else {
+      navigation.navigate('register');
     }
-  }
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -75,11 +76,8 @@ function DashboardScreen() {
                 <Text style={styles.urduText}>سبسڈی کی اہلیت چیک کریں</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.btn}
-              onPress={handleAuth}
-              >
-              {/* <Image source={require('./../../assets/pmt.png')} /> */}
+            <TouchableOpacity style={styles.btn} onPress={handleAuth}>
+              <ScanBarcode size="32" color={'#fff'} />
               <View style={styles.twoLineText}>
                 <Text style={styles.btnTitle}>GET SUBSIDY CODE</Text>
                 <Text style={styles.urduText}>سبسڈی کوڈ حاصل کریں</Text>

@@ -19,25 +19,35 @@ import {qrUrl} from '../../constants/url';
 function QuickResponseCodeScreen() {
   const navigation = useNavigation();
 
-  const [qrData, setQrData] = useState('');
+  const [qrData, setQrData] = useState(null);
+  const [isDisplayOTP, setIsDisplayOTP] = useState(false);
+  const [otp, setOTP] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     verifyOTP();
   }, []);
 
   const verifyOTP = async () => {
+    setIsLoading(true);
+
     const token = await AsyncStorage.getItem('token');
 
     try {
-      const response = await axios.get(`${qrUrl}/user/otp`, {
+      const response = await axios.get(`${qrUrl}/user/otp?platform=app`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       setQrData(response.data.data.cnic + response.data.data.otp);
+      setIsDisplayOTP(response?.data?.data?.display_otp ?? false);
+      setOTP(response?.data?.data?.otp ?? null);
+
+      setIsLoading(false);
     } catch (err) {
       console.error(JSON.stringify(err.response?.data || err.message, null, 2));
+      setIsLoading(false);
     }
   };
 
@@ -78,12 +88,22 @@ function QuickResponseCodeScreen() {
                 marginVertical: '12%',
                 alignSelf: 'center',
               }}>
-              {qrData !== '' ? (
+              {qrData !== null && !isLoading ? (
                 <QRCode value={qrData} />
               ) : (
                 <ActivityIndicator />
               )}
             </View>
+
+            {isDisplayOTP && otp && (
+              <View
+                style={{
+                  marginVertical: '12%',
+                  alignSelf: 'center',
+                }}>
+                <Text>Your OTP is: {otp}</Text>
+              </View>
+            )}
 
             <TouchableOpacity
               style={styles.solidButton}

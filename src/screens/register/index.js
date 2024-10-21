@@ -14,6 +14,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from 'axios';
 import {qrUrl} from '../../constants/url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 const InputField = ({
   label,
@@ -43,17 +44,31 @@ function RegisterScreen() {
   const [cnic, setCNIC] = useState(null);
 
   const handleRegister = async () => {
-    try {
-      const response = await axios.post(`${qrUrl}/user/auth`, {
+    if (phone === null || cnic === null) {
+      Toast.show({
+        position: 'bottom',
+        type: 'error',
+        text1: 'Error',
+        text2: 'Phone & cnic is required',
+      });
+
+      return;
+    }
+
+    await axios
+      .post(`${qrUrl}/user/auth`, {
         mobile_no: phone,
         cnic: cnic,
-      });
-      await AsyncStorage.setItem('token', response.data.result);
+      })
+      .then(async res => {
+        await AsyncStorage.setItem('token', res.data.result);
 
-      navigation.navigate('accountVerificationSuccess')
-    } catch (err) {
-      // console.log(JSON.stringify(err.response?.data || err.message, null, 2));
-    }
+        navigation.navigate('accountVerificationSuccess');
+      })
+      .catch(err => {
+        console.log('err ', JSON.stringify(err, null, 2));
+      })
+      .finally(() => {});
   };
 
   return (
