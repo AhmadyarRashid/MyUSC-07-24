@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -16,14 +16,24 @@ import {ScanBarcode} from 'iconsax-react-native';
 function DashboardScreen() {
   const navigation = useNavigation();
 
-  const handleAuth = async () => {
-    const token = await AsyncStorage.getItem('token');
+  const [displaySubsidy, setDisplaySubsidy] = useState(false);
 
+  useEffect(() => {
+    handleDisplaySubsidy();
+  }, []);
+
+  const handleAuth = async () => {
+    const token = await AsyncStorage.getItem('token');    
     if (token) {
       navigation.navigate('quickResponseCode');
     } else {
       navigation.navigate('register');
     }
+  };
+
+  const handleDisplaySubsidy = async () => {
+    const displayOTPString = await AsyncStorage.getItem('displayOTP');
+    setDisplaySubsidy(displayOTPString === 'true');
   };
 
   return (
@@ -76,13 +86,15 @@ function DashboardScreen() {
                 <Text style={styles.urduText}>سبسڈی کی اہلیت چیک کریں</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.btn} onPress={handleAuth}>
-              <ScanBarcode size="32" color={'#fff'} />
-              <View style={styles.twoLineText}>
-                <Text style={styles.btnTitle}>GET SUBSIDY CODE</Text>
-                <Text style={styles.urduText}>سبسڈی کوڈ حاصل کریں</Text>
-              </View>
-            </TouchableOpacity>
+            {displaySubsidy && (
+              <TouchableOpacity style={styles.btn} onPress={handleAuth}>
+                <ScanBarcode size="32" color={'#fff'} />
+                <View style={styles.twoLineText}>
+                  <Text style={styles.btnTitle}>GET SUBSIDY CODE</Text>
+                  <Text style={styles.urduText}>سبسڈی کوڈ حاصل کریں</Text>
+                </View>
+              </TouchableOpacity>
+            )}
             {/*<TouchableOpacity*/}
             {/*  style={styles.btn}*/}
             {/*  onPress={() => navigation.navigate('reports')}>*/}

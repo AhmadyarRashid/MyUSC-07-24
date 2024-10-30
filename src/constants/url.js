@@ -1,1 +1,1 @@
- export const qrUrl = 'http://192.168.250.224:8069'
+ export const qrUrl = 'http://192.168.250.224:8069/api/v1'

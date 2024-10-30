@@ -15,6 +15,7 @@ import QRCode from 'react-native-qrcode-svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {qrUrl} from '../../constants/url';
+import Toast from 'react-native-toast-message';
 
 function QuickResponseCodeScreen() {
   const navigation = useNavigation();
@@ -33,20 +34,31 @@ function QuickResponseCodeScreen() {
 
     const token = await AsyncStorage.getItem('token');
 
+    console.log('token ',token);
+    
+
     try {
-      const response = await axios.get(`${qrUrl}/user/otp?platform=app`, {
+      const response = await axios.get(`${qrUrl}/app/user/otp?platform=app`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      setQrData(response.data.data.cnic + response.data.data.otp);
-      setIsDisplayOTP(response?.data?.data?.display_otp ?? false);
-      setOTP(response?.data?.data?.otp ?? null);
-
-      setIsLoading(false);
+      if (response.status === 201) {
+        setQrData(response.data.payload.cnic + response.data.payload.otp);
+        setIsDisplayOTP(response?.data?.payload?.display_otp ?? false);
+        setOTP(response?.data?.payload?.otp ?? null);
+      }
     } catch (err) {
-      console.error(JSON.stringify(err.response?.data || err.message, null, 2));
+      const errorMessage = err.response?.data?.message || 'An error occurred';
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: errorMessage,
+      });
+
+      clearToken();
+    } finally {
       setIsLoading(false);
     }
   };

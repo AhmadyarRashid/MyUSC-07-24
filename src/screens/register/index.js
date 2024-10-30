@@ -56,19 +56,24 @@ function RegisterScreen() {
     }
 
     await axios
-      .post(`${qrUrl}/user/auth`, {
-        mobile_no: phone,
+      .post(`${qrUrl}/usc/app/user/auth`, {
+        mobile: phone,
         cnic: cnic,
       })
       .then(async res => {
-        await AsyncStorage.setItem('token', res.data.result);
-
-        navigation.navigate('accountVerificationSuccess');
+        if (res.status === 200) {
+          await AsyncStorage.setItem('token', res.data.token);
+          navigation.navigate('accountVerificationSuccess');
+        }
       })
       .catch(err => {
-        console.log('err ', JSON.stringify(err, null, 2));
-      })
-      .finally(() => {});
+        const errorMessage = err.response?.data?.message || 'An error occurred';
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: errorMessage,
+        });
+      });
   };
 
   return (
