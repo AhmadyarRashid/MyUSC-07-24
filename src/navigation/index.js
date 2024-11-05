@@ -13,6 +13,9 @@ import SalesReportScreen from '../screens/salesReport';
 import VideoPlayerScreen from '../screens/videoPlayer';
 import FilterProvinceStoreScreen from '../screens/storeLocator/filterProvince';
 import ViewOnMapScreen from '../screens/storeLocator/viewOnMap';
+import RegsiterScreen from '../screens/register';
+import AccountVerificationSuccessScreen from '../screens/accountVerificationSuccess';
+import QuickResponseCodeScreen from '../screens/quickResponseCode';
 
 const Stack = createNativeStackNavigator();
 
@@ -41,6 +44,9 @@ function Navigation() {
       <Stack.Screen name="video" component={VideoPlayerScreen} />
       <Stack.Screen name="instructions" component={InstructionsScreen} />
       <Stack.Screen name="ViewOnMap" component={ViewOnMapScreen} />
+      <Stack.Screen name="register" component={RegsiterScreen} />
+      <Stack.Screen name="accountVerificationSuccess" component={AccountVerificationSuccessScreen} />
+      <Stack.Screen name="quickResponseCode" component={QuickResponseCodeScreen} />
     </Stack.Navigator>
   );
 }

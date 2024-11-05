@@ -1,0 +1,1 @@
+ export const qrUrl = 'https://otp.uscpak.com:8069/api/v1'

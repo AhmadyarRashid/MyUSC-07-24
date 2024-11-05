@@ -9,20 +9,22 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
+import {qrUrl} from '../../constants/url';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function SplashScreen() {
   const navigation = useNavigation();
   const moveAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'dashboard'}],
-      });
-    }, 3500);
-    return () => clearTimeout(timeoutId);
-  }, [navigation]);
+    const removeOtpAndHandleControls = async () => {
+      await AsyncStorage.removeItem('displayOTP');
+      handleAppControls();
+    };
+
+    removeOtpAndHandleControls();
+  }, []);
 
   useEffect(() => {
     // Get screen width
@@ -39,6 +41,30 @@ function SplashScreen() {
       useNativeDriver: true, // Use the native driver for better performance
     }).start();
   }, [moveAnimation]);
+
+  const handleAppControls = async () => {
+    await axios
+      .get(`${qrUrl}/app/check/bisp-enabled`)
+      .then(async res => {
+        if (res?.data?.isSuccess) {
+          await AsyncStorage.setItem('displayOTP', String(res?.data?.bisp));
+        }
+      })
+      .catch(err => {})
+      .finally(() => {
+        navigate();
+      });
+  };
+
+  const navigate = () => {
+    const timeoutId = setTimeout(() => {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'dashboard'}],
+      });
+    }, 3500);
+    return () => clearTimeout(timeoutId);
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
