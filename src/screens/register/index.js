@@ -40,40 +40,85 @@ const InputField = ({
 function RegisterScreen() {
   const navigation = useNavigation();
 
-  const [phone, setPhone] = useState(null);
-  const [cnic, setCNIC] = useState(null);
+  const [phone, setPhone] = useState('');
+  const [cnic, setCNIC] = useState('');
 
   const handleRegister = async () => {
-    if (phone === null || cnic === null) {
+    // Scenario 1: Check if phone or cnic is empty
+    if (phone === '' || cnic === '') {
       Toast.show({
         position: 'bottom',
         type: 'error',
         text1: 'Error',
-        text2: 'Phone & cnic is required',
+        text2: 'Phone & CNIC are required',
       });
-
       return;
     }
 
-    await axios
-      .post(`${qrUrl}/usc/app/user/auth`, {
+    // Scenario 2: Check if phone and cnic are numbers
+    if (!/^\d+$/.test(phone) || !/^\d+$/.test(cnic)) {
+      Toast.show({
+        position: 'bottom',
+        type: 'error',
+        text1: 'Error',
+        text2: 'All fields must be numeric',
+      });
+      return;
+    }
+
+    // Scenario 3: Check if phone number starts with 03
+    if (!phone.startsWith('03')) {
+      Toast.show({
+        position: 'bottom',
+        type: 'error',
+        text1: 'Error',
+        text2: 'Phone format must be 03XXXXXXXXX',
+      });
+      return;
+    }
+
+    // Scenario 4: Check phone number length
+    if (phone.length !== 11) {
+      Toast.show({
+        position: 'bottom',
+        type: 'error',
+        text1: 'Error',
+        text2: 'Invalid phone number',
+      });
+      return;
+    }
+
+    // Scenario 5: Check CNIC length
+    if (cnic.length !== 13) {
+      Toast.show({
+        position: 'bottom',
+        type: 'error',
+        text1: 'Error',
+        text2: 'CNIC must be 13 digits long',
+      });
+      return;
+    }
+
+    // All validations passed, proceed to call the API
+    try {
+      const res = await axios.post(`${qrUrl}/usc/app/user/auth`, {
         mobile: phone,
         cnic: cnic,
-      })
-      .then(async res => {
-        if (res.status === 200) {
-          await AsyncStorage.setItem('token', res.data.token);
-          navigation.navigate('accountVerificationSuccess');
-        }
-      })
-      .catch(err => {
-        const errorMessage = err.response?.data?.message || 'An error occurred';
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: errorMessage,
-        });
       });
+      
+      if (res.status === 200) {
+        await AsyncStorage.setItem('token', res?.data?.payload?.token);
+        navigation.navigate('accountVerificationSuccess');
+      }
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 'An error occurred';
+      Toast.show({
+        position:"bottom",
+        type: 'error',
+        text1: 'Error',
+        text2: errorMessage,
+      });
+    }
   };
 
   return (
@@ -95,6 +140,14 @@ function RegisterScreen() {
         </View>
         <ScrollView>
           <View style={styles.main}>
+          <InputField
+              label="CNIC"
+              placeholder="Enter CNIC"
+              maxLength={13}
+              keyboardType="numeric"
+              onChangeText={text => setCNIC(text)}
+              value={cnic}
+            />
             <InputField
               label="Phone"
               placeholder="Enter phone"
@@ -102,14 +155,6 @@ function RegisterScreen() {
               keyboardType="numeric"
               onChangeText={text => setPhone(text)}
               value={phone}
-            />
-            <InputField
-              label="CNIC"
-              placeholder="Enter CNIC"
-              maxLength={13}
-              keyboardType="numeric"
-              onChangeText={text => setCNIC(text)}
-              value={cnic}
             />
             <TouchableOpacity
               style={styles.solidButton}

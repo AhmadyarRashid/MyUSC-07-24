@@ -18,7 +18,12 @@ function SplashScreen() {
   const moveAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    handleAppControls();
+    const removeOtpAndHandleControls = async () => {
+      await AsyncStorage.removeItem('displayOTP');
+      handleAppControls();
+    };
+
+    removeOtpAndHandleControls();
   }, []);
 
   useEffect(() => {
@@ -41,7 +46,9 @@ function SplashScreen() {
     await axios
       .get(`${qrUrl}/app/check/bisp-enabled`)
       .then(async res => {
-        await AsyncStorage.setItem('displayOTP', String(res.data.bisp));
+        if (res?.data?.isSuccess) {
+          await AsyncStorage.setItem('displayOTP', String(res?.data?.bisp));
+        }
       })
       .catch(err => {})
       .finally(() => {

@@ -34,33 +34,33 @@ function QuickResponseCodeScreen() {
 
     const token = await AsyncStorage.getItem('token');
 
-    console.log('token ',token);
-    
-
-    try {
-      const response = await axios.get(`${qrUrl}/app/user/otp?platform=app`, {
+    await axios
+      .get(`${qrUrl}/app/user/otp?platform=app`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
+      })
+      .then(res => {        
+        if (res?.data?.isSuccess) {
+          setQrData(res?.data?.payload?.cnic + res?.data?.payload?.otp);
+          setIsDisplayOTP(res?.data?.payload?.display_otp ?? false);
+          setOTP(res?.data?.payload?.otp ?? null);
+        }
+      })
+      .catch(err => {
+        const errorMessage = err.response?.data?.message || 'An error occurred';
+        Toast.show({
+          position: 'bottom',
+          type: 'error',
+          text1: 'Error',
+          text2: errorMessage,
+        });
 
-      if (response.status === 201) {
-        setQrData(response.data.payload.cnic + response.data.payload.otp);
-        setIsDisplayOTP(response?.data?.payload?.display_otp ?? false);
-        setOTP(response?.data?.payload?.otp ?? null);
-      }
-    } catch (err) {
-      const errorMessage = err.response?.data?.message || 'An error occurred';
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: errorMessage,
+        clearToken();
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-
-      clearToken();
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   const clearToken = async () => {
@@ -97,7 +97,6 @@ function QuickResponseCodeScreen() {
 
             <View
               style={{
-                marginVertical: '12%',
                 alignSelf: 'center',
               }}>
               {qrData !== null && !isLoading ? (
@@ -110,10 +109,18 @@ function QuickResponseCodeScreen() {
             {isDisplayOTP && otp && (
               <View
                 style={{
-                  marginVertical: '12%',
+                  marginVertical: '6%',
                   alignSelf: 'center',
+                  flexDirection:"row",
+                  justifyContent:"center"
                 }}>
-                <Text>Your OTP is: {otp}</Text>
+                <Text style={{
+                  fontSize:18
+                }}>Your OTP is: </Text>
+                <Text style={{
+                  fontWeight:"bold",
+                  fontSize:18
+                }}>{otp}</Text>
               </View>
             )}
 
